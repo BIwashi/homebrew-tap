@@ -2,11 +2,36 @@
 cask "apogee-desktop" do
   app "Apogee.app"
 
-  version "0.1.16"
+  uninstall_preflight do
+    # Quit any running Apogee.app before we remove the bundle so
+    # /Applications/Apogee.app is not held open by WindowServer.
+    system_command "/usr/bin/osascript",
+                   args: ["-e", 'tell application id "dev.apogee.desktop" to quit'],
+                   sudo: false,
+                   must_succeed: false
+
+    # If the desktop shell bootstrapped the daemon on first launch,
+    # tear it down here. We only `bootout` (stop it) and leave the
+    # plist on disk — `brew upgrade --cask apogee-desktop` does an
+    # uninstall+install pair under the hood, and deleting the plist
+    # every upgrade would trigger a spurious re-onboard on the next
+    # launch. Full plist removal is reserved for `brew uninstall
+    # --zap --cask apogee-desktop`, which takes the `zap trash:`
+    # path below.
+    marker = File.expand_path("~/.apogee/installed-by-desktop")
+    if File.exist?(marker)
+      system_command "/bin/launchctl",
+                     args: ["bootout", "gui/#{Process.uid}/dev.biwashi.apogee"],
+                     sudo: false,
+                     must_succeed: false
+    end
+  end
+
+  version "0.1.17"
 
   on_macos do
     url "https://github.com/BIwashi/apogee/releases/download/v#{version}/apogee-desktop_#{version}_darwin_universal.zip"
-    sha256 "aa851d1442035a5703faa023679976eef0c71aedbfc5790f83418d4ade903fbf"
+    sha256 "a75495d0f31ecc12158ed190b9de19e80e41441950f086ee37e123a954132f44"
   end
 
   name "apogee-desktop"
@@ -16,6 +41,9 @@ cask "apogee-desktop" do
   livecheck do
     skip "Auto-generated on release."
   end
+  depends_on formula: [
+      "BIwashi/tap/apogee",
+    ]
 
   binary "apogee-desktop"
 
@@ -23,7 +51,16 @@ cask "apogee-desktop" do
     system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/Apogee.app"]
   end
 
+  uninstall launchctl: [
+      "dev.biwashi.apogee",
+    ],
+    quit: [
+      "dev.apogee.desktop",
+    ]
+
   zap trash: [
+      "~/.apogee",
+      "~/Library/LaunchAgents/dev.biwashi.apogee.plist",
       "~/Library/Application Support/apogee-desktop",
       "~/Library/Caches/dev.apogee.desktop",
       "~/Library/Preferences/dev.apogee.desktop.plist",
