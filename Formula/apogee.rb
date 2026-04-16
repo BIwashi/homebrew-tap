@@ -5,21 +5,21 @@
 class Apogee < Formula
   desc "Multi-agent observability dashboard for Claude Code."
   homepage "https://github.com/BIwashi/apogee"
-  version "0.1.18"
+  version "0.1.19"
   license "Apache-2.0"
   depends_on :macos
 
   if Hardware::CPU.intel?
-    url "https://github.com/BIwashi/apogee/releases/download/v0.1.18/apogee_0.1.18_darwin_amd64.tar.gz"
-    sha256 "508f08ec9dbd5e0cefdf221871d587ae961e8c00fb00ffb5f7e09aafa1f177b6"
+    url "https://github.com/BIwashi/apogee/releases/download/v0.1.19/apogee_0.1.19_darwin_amd64.tar.gz"
+    sha256 "14b8075e95069e8d69d62b82cd6abd7650274481c98e541632ca59432a24d424"
 
     define_method(:install) do
       bin.install "apogee"
     end
   end
   if Hardware::CPU.arm?
-    url "https://github.com/BIwashi/apogee/releases/download/v0.1.18/apogee_0.1.18_darwin_arm64.tar.gz"
-    sha256 "3ca3601ceaed008922602a521f013e0236304fb159c762e56148007ea4e9df48"
+    url "https://github.com/BIwashi/apogee/releases/download/v0.1.19/apogee_0.1.19_darwin_arm64.tar.gz"
+    sha256 "34eb81ba8719bb7466c0f66ff620ae48efd52f8beb99962c6fc201cdf1edf80d"
 
     define_method(:install) do
       bin.install "apogee"
