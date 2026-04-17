@@ -27,11 +27,11 @@ cask "apogee-desktop" do
     end
   end
 
-  version "0.1.23"
+  version "0.1.24"
 
   on_macos do
     url "https://github.com/BIwashi/apogee/releases/download/v#{version}/apogee-desktop_#{version}_darwin_universal.zip"
-    sha256 "e4256b055bafee630a271b9564b337bccb512a274a65b4e5ef1a2b5532540d45"
+    sha256 "1580c505c26f2f5c8b1563c540a092195cedf3abee6d46e12972f0fd1725f2ae"
   end
 
   name "apogee-desktop"
